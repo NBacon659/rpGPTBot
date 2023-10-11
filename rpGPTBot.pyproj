@@ -25,9 +25,6 @@
     <Compile Include="rpGPTBot.py" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include=".env" />
-  </ItemGroup>
-  <ItemGroup>
     <InterpreterReference Include="Global|PythonCore|3.11" />
     <InterpreterReference Include="Global|PythonCore|3.12" />
   </ItemGroup>

@@ -9,32 +9,39 @@ from discord.ext import commands
 intents = discord.Intents.all()
 
 load_dotenv()
-
+#Grab environment variables
 TOKEN = os.environ["DISCORD_TOKEN"]
 openai.api_key = os.environ["OPEN_AI_KEY"]
 
 bot = commands.Bot(intents = intents, command_prefix='/')
 
+#Indicate when bot is connected
 @bot.event
 async def on_ready():
     print(f'{bot.user.name} has connected to Discord!')
 
+#Create slash command
 @bot.slash_command(name='makeparty', description='Create a party for an RPG')
+#Create context object
 async def rpGPT_make_party(ctx, platform: str, members: int):
+    #Generate acknowledgment message for Discord client
     await ctx.respond(f"Generating party for {ctx.author.mention}...", ephemeral=True)
+    #Generate typing indicator for user feedback
     async with ctx.typing():
         completion = openai.ChatCompletion.create(
             model = "gpt-3.5-turbo",
             temperature = 0.9,
             max_tokens = 1500,
             messages = [
-                {"role": "system", "content": "You will create a balanced party using a specified number of members for the specified platform. "
+                {"role": "system", "content": "You will create a balanced party using a specified number of members for the specified platform. " #Prompt GPT
                  "Include each name, race, class, and a 2 sentence backstory."},
                 {"role": "user", "content": f"Platform: {platform}, members: {members} "}
                 ]
             )
+        #Save GPT response content in variable
         response = completion['choices'][0]['message']['content']
         await asyncio.sleep(10);
+        #Send response in mentioned message on discord client
     await ctx.send(f"{ctx.author.mention} your party has been generated:\n\n{response}")
 
 @bot.slash_command(name='encounter', description='Create a random encounter for your party')
