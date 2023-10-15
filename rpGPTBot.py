@@ -165,7 +165,7 @@ async def rpGPT_townsum(ctx, platform: str, size_of_town: str):
     await ctx.send(f"{ctx.author.mention} here is the summary of your new town:\n\n{response}")
 
 @bot.slash_command(name='help', description='Get a list of commands and their descriptions')
-async def rpGPT_help(ctx, platform: str, size_of_town: str):
+async def rpGPT_help(ctx):
     await ctx.respond(f"{ctx.author.mention} Getting your list of commands", ephemeral=True)
     async with ctx.typing():
         response = """Commands:\n\n
