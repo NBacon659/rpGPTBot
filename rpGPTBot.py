@@ -164,5 +164,33 @@ async def rpGPT_townsum(ctx, platform: str, size_of_town: str):
         await asyncio.sleep(10);
     await ctx.send(f"{ctx.author.mention} here is the summary of your new town:\n\n{response}")
 
+@bot.slash_command(name='help', description='Get a list of commands and their descriptions')
+async def rpGPT_help(ctx, platform: str, size_of_town: str):
+    await ctx.respond(f"{ctx.author.mention} Getting your list of commands", ephemeral=True)
+    async with ctx.typing():
+        response = """Commands:\n\n
+
+        /makeparty: makes a party for the game you indicate (platform), with the
+        number of players indicated.\n\n
+
+        /encounter: creates an encounter on the fly for your the game you indicate (platform).
+
+        /town: creates a detailed description of a town, including rumors and lore for the
+        given game (platform).\n\n
+
+        /townsum: creates 10 bullet points about a random town. Similar to /town but a summary.\n\n
+
+        /quest: creates an instant quest-hook for the given game (platform).\n\n
+
+        /backstory: creates a backstory for a character given a game (platform), name, race
+        alliance (neutral/chaotic good, etc), and personality.\n\n
+
+        /bard: writes a song given a set of characters involved and any information you want to provide
+        about each character.\n\n
+
+        /npc: creates names and races for the given number of npc's.
+        """
+    await ctx.send(f"{ctx.author.mention} here is the list of commands and their uses...\n\n{response}")
+
 
 bot.run(TOKEN)
