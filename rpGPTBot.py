@@ -167,7 +167,7 @@ async def rpGPT_townsum(ctx, platform: str, size_of_town: str):
 
 @bot.slash_command(name='roll', description='Roll a number of dice of any sides and add modifiers')
 async def rpGPT_roll(ctx, number_of_dice: int, number_of_sides: int, modifier = 0):
-    await ctx.respond(f"{ctx.author.mention} Getting your list of commands", ephemeral=True)
+    await ctx.respond(f"{ctx.author.mention} Getting your roll", ephemeral=True)
     async with ctx.typing():
         response = f"{ctx.author.mention} -> ("
     total = 0
