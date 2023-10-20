@@ -5,6 +5,7 @@ import openai
 
 from dotenv import load_dotenv
 from discord.ext import commands
+from random import randint
 
 intents = discord.Intents.all()
 
@@ -164,6 +165,29 @@ async def rpGPT_townsum(ctx, platform: str, size_of_town: str):
         await asyncio.sleep(10);
     await ctx.send(f"{ctx.author.mention} here is the summary of your new town:\n\n{response}")
 
+@bot.slash_command(name='roll', description='Roll a number of dice of any sides and add modifiers')
+async def rpGPT_roll(ctx, number_of_dice: int, number_of_sides: int, modifier = 0):
+    await ctx.respond(f"{ctx.author.mention} Getting your list of commands", ephemeral=True)
+    async with ctx.typing():
+        response = f"{ctx.author.mention} -> ("
+    total = 0
+
+    if(number_of_dice > 1):
+        for _ in range(number_of_dice):
+            this_roll = randint(1, number_of_sides)
+            total = total + this_roll
+            response += f"{this_roll},"
+        
+        response = response[:-1]
+        response += f") + {modifier} = {total + modifier}"
+    else:
+        response = response[:-1]
+        this_roll = randint(1, number_of_sides)
+        total += this_roll
+        response += f"{this_roll} + {modifier} = {this_roll + modifier}"
+
+    await ctx.send(f"{response}")
+
 @bot.slash_command(name='help', description='Get a list of commands and their descriptions')
 async def rpGPT_help(ctx):
     await ctx.respond(f"{ctx.author.mention} Getting your list of commands", ephemeral=True)
@@ -185,8 +209,11 @@ async def rpGPT_help(ctx):
         /bard: writes a song given a set of characters involved and any information you want to provide about each character.\n
 
         /npc: creates names and races for the given number of npc's.
+
+        /roll: random number generator simulating rolls of dice given: number of dice, number of sides on the given dice, optional modifier amount.
         """
     await ctx.send(f"{ctx.author.mention} here is the list of commands and their uses...\n\n{response}")
+
 
 
 bot.run(TOKEN)
