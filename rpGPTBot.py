@@ -166,25 +166,27 @@ async def rpGPT_townsum(ctx, platform: str, size_of_town: str):
     await ctx.send(f"{ctx.author.mention} here is the summary of your new town:\n\n{response}")
 
 @bot.slash_command(name='roll', description='Roll a number of dice of any sides and add modifiers')
-async def rpGPT_roll(ctx, number_of_dice: int, number_of_sides: int, modifier = 0):
+async def rpGPT_roll(ctx, number_of_dice: int, number_of_sides: int, modifier: int = 0):
     await ctx.respond(f"{ctx.author.mention} Getting your roll", ephemeral=True)
     async with ctx.typing():
-        response = f"{ctx.author.mention} -> ("
-    total = 0
-
-    if(number_of_dice > 1):
+        response = f"{ctx.author.mention} -> "
+        total = 0
+        rolls = ""
         for _ in range(number_of_dice):
             this_roll = randint(1, number_of_sides)
-            total = total + this_roll
-            response += f"{this_roll},"
-        
-        response = response[:-1]
-        response += f") + {modifier} = {total + modifier}"
-    else:
-        response = response[:-1]
-        this_roll = randint(1, number_of_sides)
-        total += this_roll
-        response += f"{this_roll} + {modifier} = {this_roll + modifier}"
+            total += this_roll
+            rolls += f"{this_roll},"
+        rolls = rolls[:-1] #truncate trailing comma
+
+        if number_of_dice > 1:
+            rolls = f"({rolls})"
+
+        response += f"{number_of_dice}d{number_of_sides}: {rolls}"
+        if modifier != 0:
+            operator = " - " if modifier < 0 else " + "
+            response += f"{operator}{abs(modifier)} = {total + modifier}"
+        else:
+            response += f" = {total}"
 
     await ctx.send(f"{response}")
 
